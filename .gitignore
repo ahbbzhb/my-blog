@@ -10,3 +10,4 @@ prisma/client/
 Thumbs.db
 *.log
 npm-debug.log*
+tsconfig.tsbuildinfo

@@ -1,0 +1,159 @@
+/* ============================================
+   用户主页
+   ============================================ */
+
+.page {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+.backLink {
+  display: inline-block;
+  margin-bottom: 32px;
+  font-size: 14px;
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 用户信息卡片 ---------- */
+
+.profile {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0070f3, #00c6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  user-select: none;
+}
+
+.profileInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.username {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.bio {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.joinDate {
+  font-size: 14px;
+  color: #999;
+}
+
+/* ---------- 分割线 ---------- */
+
+.divider {
+  border: none;
+  border-top: 1px solid #e5e5e5;
+  margin-bottom: 32px;
+}
+
+/* ---------- 文章列表 ---------- */
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 20px;
+}
+
+.postList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.emptyHint {
+  font-size: 15px;
+  color: #999;
+  padding: 32px 0;
+  text-align: center;
+}
+
+/* ---------- 用户不存在 ---------- */
+
+.notFound {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 96px 24px;
+  text-align: center;
+}
+
+.notFoundTitle {
+  font-size: 24px;
+  color: #999;
+  margin-bottom: 16px;
+}
+
+.notFoundLink {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.notFoundLink:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
+   响应式
+   ============================================ */
+
+@media (max-width: 640px) {
+  .page {
+    padding: 32px 16px;
+  }
+
+  .profile {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    font-size: 26px;
+  }
+
+  .username {
+    font-size: 24px;
+  }
+
+  .bio {
+    font-size: 15px;
+  }
+
+  .sectionTitle {
+    font-size: 18px;
+  }
+}

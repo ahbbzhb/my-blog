@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { PostData } from "@/app/lib/data";
+import type { PostData } from "../lib/types";
 
 export default function PostCard({ post }: { post: PostData }) {
   return (
@@ -15,8 +15,8 @@ export default function PostCard({ post }: { post: PostData }) {
         <Link href={`/u/${post.author.username}`} className="post-card-author">
           {post.author.username}
         </Link>
-        <time className="post-card-date" dateTime={post.createdAt}>
-          {post.createdAt}
+        <time className="post-card-date" dateTime={post.createdAt.toISOString()}>
+          {post.createdAt.toLocaleDateString()}
         </time>
         <span className="post-card-views">{post.views} 次阅读</span>
       </div>

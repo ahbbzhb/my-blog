@@ -4,28 +4,10 @@
 // Phase 3: 替换为 Prisma 查询
 // ============================================
 
-export interface PostData {
-  id: string;
-  title: string;
-  slug: string;
-  summary: string;
-  content: string;
-  published: boolean;
-  views: number;
-  createdAt: string;
-  author: {
-    username: string;
-    avatar: string | null;
-  };
-}
-
-export interface UserData {
-  id: string;
-  username: string;
-  avatar: string | null;
-  bio: string | null;
-  createdAt: string;
-}
+import type {
+  PostData,
+  UserData,
+} from "./types";
 
 // 模拟文章列表（多人平台）
 export function getPosts(): PostData[] {
@@ -35,10 +17,10 @@ export function getPosts(): PostData[] {
       title: "搭建个人博客的完整指南",
       slug: "how-to-build-a-blog",
       summary: "从零开始，用 Next.js + Prisma + Docker 搭建一个现代化的个人博客网站，涵盖前端、后端和部署。",
-      content: "",
+      content: "学习从 mock data 读取文章",
       published: true,
       views: 1280,
-      createdAt: "2026-05-20",
+      createdAt: new Date("2026-05-20"),
       author: { username: "hongbo", avatar: null },
     },
     {
@@ -46,10 +28,23 @@ export function getPosts(): PostData[] {
       title: "为什么我选择 TypeScript",
       slug: "why-i-chose-typescript",
       summary: "TypeScript 的静态类型系统如何在大型项目中减少 bug、提升开发体验，以及我的一些实践心得。",
-      content: "",
+      content: `
+这是我的第一篇博客。
+
+在这篇文章中，我们会从零开始，
+使用 Next.js、Prisma 和 Docker
+搭建一个现代博客系统。
+
+内容包括：
+
+1. 项目初始化
+2. 路由设计
+3. 数据库设计
+4. 登录认证
+`,
       published: true,
       views: 856,
-      createdAt: "2026-05-15",
+      createdAt: new Date("2026-05-15"),
       author: { username: "alice", avatar: null },
     },
     {
@@ -60,7 +55,7 @@ export function getPosts(): PostData[] {
       content: "",
       published: true,
       views: 2103,
-      createdAt: "2026-05-10",
+      createdAt: new Date("2026-05-10"),
       author: { username: "bob", avatar: null },
     },
     {
@@ -71,7 +66,7 @@ export function getPosts(): PostData[] {
       content: "",
       published: true,
       views: 672,
-      createdAt: "2026-05-05",
+      createdAt: new Date("2026-05-05"),
       author: { username: "hongbo", avatar: null },
     },
     {
@@ -82,7 +77,7 @@ export function getPosts(): PostData[] {
       content: "",
       published: true,
       views: 3401,
-      createdAt: "2026-05-01",
+      createdAt: new Date("2026-05-01"),
       author: { username: "alice", avatar: null },
     },
   ];
@@ -101,21 +96,21 @@ export function getUserByUsername(username: string): UserData | undefined {
       username: "hongbo",
       avatar: null,
       bio: "全栈开发者，热爱开源。写博客记录学习过程。",
-      createdAt: "2025-01-01",
+      createdAt: new Date("2026-05-21"),
     },
     {
       id: "u2",
       username: "alice",
       avatar: null,
       bio: "前端工程师，TypeScript 和 Rust 爱好者。",
-      createdAt: "2025-03-15",
+      createdAt: new Date("2026-06-03"),
     },
     {
       id: "u3",
       username: "bob",
       avatar: null,
       bio: "DevOps 工程师，专注于容器化和自动化部署。",
-      createdAt: "2025-06-20",
+      createdAt: new Date("2026-06-07"),
     },
   ];
   return users.find((user) => user.username === username);
