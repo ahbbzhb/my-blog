@@ -6,7 +6,7 @@ export interface PostData {
   id: string;
   title: string;
   slug: string;
-  summary: string;
+  summary: string | null;
   content: string;
   published: boolean;
   views: number;

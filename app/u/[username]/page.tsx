@@ -10,7 +10,7 @@ export default async function UserPage({
 }) {
   const { username } = await params;
 
-  const user = getUserByUsername(username);
+  const user = await getUserByUsername(username);
 
   // 用户不存在
   if (!user) {
@@ -25,7 +25,7 @@ export default async function UserPage({
     );
   }
 
-  const posts = getPostsByUsername(username);
+  const posts = await getPostsByUsername(username);
 
   // 头像首字母
   const avatarLetter = user.username.charAt(0).toUpperCase();
