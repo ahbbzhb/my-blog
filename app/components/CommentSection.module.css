@@ -1,0 +1,172 @@
+/* ============================================
+   评论区域
+   ============================================ */
+
+.section {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+
+.heading {
+  font-size: 22px;
+  font-weight: 600;
+  color: #111;
+  margin-bottom: 24px;
+  padding-top: 32px;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* ---- 登录提示 ---- */
+
+.loginPrompt {
+  font-size: 15px;
+  color: #999;
+  padding: 24px;
+  text-align: center;
+  background: #f7f7f7;
+  border-radius: 8px;
+}
+
+.loginLink {
+  color: #0070f3;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.loginLink:hover {
+  text-decoration: underline;
+}
+
+/* ---- 表单 ---- */
+
+.form {
+  margin-bottom: 32px;
+}
+
+.error {
+  font-size: 13px;
+  color: #e00;
+  margin-bottom: 10px;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px 14px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  resize: vertical;
+  background: #fff;
+  transition: border-color 0.15s;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #0070f3;
+}
+
+.submitBtn {
+  margin-top: 10px;
+  padding: 8px 22px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background: #0070f3;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #0059c8;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---- 评论列表 ---- */
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.comment {
+  padding: 16px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.comment:last-child {
+  border-bottom: none;
+}
+
+.commentHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.commentAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e0e0e0;
+  flex-shrink: 0;
+}
+
+.commentAuthor {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+}
+
+.commentTime {
+  font-size: 12px;
+  color: #999;
+}
+
+.commentContent {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+}
+
+/* ---- 空态 ---- */
+
+.empty {
+  font-size: 14px;
+  color: #999;
+  text-align: center;
+  padding: 32px 0;
+}
+
+/* ============================================
+   响应式
+   ============================================ */
+
+@media (max-width: 640px) {
+  .section {
+    padding: 0 16px 48px;
+  }
+
+  .heading {
+    font-size: 18px;
+  }
+
+  .textarea {
+    font-size: 14px;
+  }
+}

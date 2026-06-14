@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../auth";
-import { getPostBySlug } from "../../lib/data";
+import { getPostBySlug, getCommentsByPostId, getPostLikeInfo } from "../../lib/data";
+import CommentSection from "../../components/CommentSection";
+import LikeButton from "../../components/LikeButton";
 import styles from "./page.module.css";
 
 export default async function BlogPage({
@@ -14,6 +16,12 @@ export default async function BlogPage({
     getPostBySlug(slug),
     getServerSession(authOptions),
   ]);
+
+  const comments = post ? await getCommentsByPostId(post.id) : [];
+  const userId = (session?.user as any)?.id as string | undefined;
+  const likeInfo = post
+    ? await getPostLikeInfo(post.id, userId)
+    : { count: 0, userLiked: false };
 
   // 是否为作者
   const isAuthor =
@@ -70,6 +78,17 @@ export default async function BlogPage({
         {/* 文章正文 */}
         <div className={styles.content}>{post.content}</div>
       </article>
+
+      {/* 文章点赞 */}
+      <div className={styles.interactions}>
+        <LikeButton
+          postId={post.id}
+          initialLiked={likeInfo.userLiked}
+          initialCount={likeInfo.count}
+        />
+      </div>
+
+      <CommentSection postId={post.id} initialComments={comments} />
     </main>
   );
 }

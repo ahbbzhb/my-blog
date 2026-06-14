@@ -24,6 +24,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   posts     Post[]
+  comments Comment[]
+  likes Like[]
 }
 
 model Post {
@@ -41,4 +43,32 @@ model Post {
   authorId  String
 
   @@unique([authorId, slug])
+  comments Comment[]
+  likes Like[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+
+  content   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authorId  String
+  postId    String
+
+  author    User     @relation(fields: [authorId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
 }

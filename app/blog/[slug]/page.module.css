@@ -72,6 +72,12 @@
   margin-bottom: 32px;
 }
 
+.interactions {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 0 24px 24px;
+}
+
 .content {
   font-size: 17px;
   line-height: 1.8;
