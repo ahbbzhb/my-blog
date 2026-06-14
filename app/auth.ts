@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import type { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -34,8 +35,11 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
-        // 现在先明文比较
-        if (user.password !== credentials.password) {
+        const isValid = await bcrypt.compare(
+          credentials.password as string,
+          user.password,
+        );
+        if (!isValid) {
           return null;
         }
 

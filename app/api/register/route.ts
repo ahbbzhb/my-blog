@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import { prisma } from "../../lib/prisma";
 
 export async function POST(
@@ -72,13 +73,14 @@ export async function POST(
       });
     }
 
-    // 写入数据库
+    // 写入数据库（密码哈希）
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user =
       await prisma.user.create({
         data: {
           username,
           email,
-          password,
+          password: hashedPassword,
         },
       });
 
