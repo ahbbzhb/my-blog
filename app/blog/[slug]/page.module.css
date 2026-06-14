@@ -50,6 +50,22 @@
   text-decoration: underline;
 }
 
+.editBtn {
+  margin-left: auto;
+  padding: 4px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0070f3;
+  text-decoration: none;
+  background: #e8f4fd;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.editBtn:hover {
+  background: #d0eaff;
+}
+
 .divider {
   border: none;
   border-top: 1px solid #e5e5e5;

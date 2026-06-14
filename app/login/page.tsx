@@ -1,5 +1,6 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -15,30 +16,24 @@ export default function LoginPage() {
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-
-    if (!username.trim() || !password.trim()) {
-      setError("用户名和密码不能为空");
-      return;
-    }
-
     setLoading(true);
 
     try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: username.trim(), password }),
+      const result = await signIn("credentials", {
+        username,
+        password,
+        redirect: false,
       });
 
-      const data = await response.json();
-
-      if (data.success) {
-        router.push(`/u/${data.user.username}`);
-      } else {
-        setError(data.message || "登录失败");
+      if (result?.error) {
+        setError("用户名或密码错误");
+        return;
       }
-    } catch (err) {
-      console.error(err);
+
+      router.push("/");
+      router.refresh();
+    } catch {
+      console.error("error");
       setError("网络错误，请稍后重试");
     } finally {
       setLoading(false);

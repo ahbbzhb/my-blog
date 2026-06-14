@@ -27,7 +27,7 @@ export async function getPostBySlug(
     where: { slug },
     include: {
       author: {
-        select: { username: true, avatar: true },
+        select: { id: true, username: true, avatar: true },
       },
     },
   });

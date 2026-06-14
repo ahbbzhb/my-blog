@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth";
 import { getPostBySlug } from "../../lib/data";
 import styles from "./page.module.css";
 
@@ -8,7 +10,16 @@ export default async function BlogPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const [post, session] = await Promise.all([
+    getPostBySlug(slug),
+    getServerSession(authOptions),
+  ]);
+
+  // 是否为作者
+  const isAuthor =
+    session?.user?.email && post?.author.id
+      ? (session.user as any).id === post.author.id
+      : false;
 
   // 文章不存在
   if (!post) {
@@ -45,6 +56,12 @@ export default async function BlogPage({
               {post.createdAt.toLocaleDateString("zh-CN")}
             </time>
             <span>{post.views} 次阅读</span>
+
+            {isAuthor && (
+              <Link href={`/editor/${post.slug}`} className={styles.editBtn}>
+                编辑
+              </Link>
+            )}
           </div>
         </header>
 

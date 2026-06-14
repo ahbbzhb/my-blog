@@ -12,6 +12,7 @@ export interface PostData {
   views: number;
   createdAt: Date;
   author: {
+    id: string;
     username: string;
     avatar: string | null;
   };

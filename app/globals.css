@@ -44,6 +44,101 @@ body {
   color: #0070f3;
 }
 
+/* 未登录时的按钮样式 */
+.navbar-btn {
+  text-decoration: none;
+  padding: 6px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+
+.navbar-btn-login {
+  color: #333;
+}
+
+.navbar-btn-login:hover {
+  background: #f0f0f0;
+}
+
+.navbar-btn-register {
+  background: #0070f3;
+  color: #fff;
+}
+
+.navbar-btn-register:hover {
+  background: #005bb5;
+}
+
+/* 已登录用户区 */
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #0070f3;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.navbar-user-avatar:hover {
+  opacity: 0.85;
+}
+
+.navbar-user-name {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.navbar-user-name:hover {
+  color: #0070f3;
+}
+
+.navbar-write-btn {
+  text-decoration: none;
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #0070f3;
+  background: #e8f4fd;
+  transition: background 0.2s;
+}
+
+.navbar-write-btn:hover {
+  background: #d0eaff;
+}
+
+.navbar-logout {
+  background: none;
+  border: 1px solid #ddd;
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #888;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.navbar-logout:hover {
+  border-color: #e00;
+  color: #e00;
+}
+
 /* ============================================
    通用布局
    ============================================ */
