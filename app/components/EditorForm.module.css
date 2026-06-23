@@ -13,6 +13,15 @@
   border-radius: 6px;
 }
 
+.success {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #15803d;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+}
+
 .field {
   display: flex;
   flex-direction: column;
@@ -62,33 +71,37 @@
   box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.15);
 }
 
-.editor {
-  min-height: 360px;
-  padding: 14px;
-  font-size: 16px;
-  color: #111;
-  background: #fff;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
-  outline: none;
-  resize: vertical;
-  font-family: inherit;
-  line-height: 1.7;
-  transition: border-color 0.15s;
-}
-
-.editor:focus {
-  border-color: #0070f3;
-  box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.15);
-}
-
 .actions {
   display: flex;
   gap: 12px;
   margin-top: 8px;
 }
 
-.submitBtn {
+.saveBtn {
+  flex: 1;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0070f3;
+  background: #fff;
+  border: 1px solid #0070f3;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.saveBtn:hover:not(:disabled) {
+  color: #fff;
+  background: #0070f3;
+}
+
+.saveBtn:disabled {
+  border-color: #8cb8f0;
+  color: #8cb8f0;
+  cursor: not-allowed;
+}
+
+.publishBtn {
   flex: 1;
   height: 44px;
   font-size: 16px;
@@ -101,11 +114,11 @@
   transition: background 0.15s;
 }
 
-.submitBtn:hover {
+.publishBtn:hover:not(:disabled) {
   background: #0060d0;
 }
 
-.submitBtn:disabled {
+.publishBtn:disabled {
   background: #8cb8f0;
   cursor: not-allowed;
 }
@@ -126,10 +139,4 @@
 .deleteBtn:hover {
   background: #fef2f2;
   border-color: #d32f2f;
-}
-
-@media (max-width: 640px) {
-  .editor {
-    min-height: 260px;
-  }
 }

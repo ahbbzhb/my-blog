@@ -1,0 +1,383 @@
+/* ============================================
+   MarkdownEditor — 分栏 Markdown 编辑器
+   ============================================ */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.wrapper:focus-within {
+  border-color: #0070f3;
+  box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.15);
+}
+
+/* ---------- 工具栏 ---------- */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: #fafafa;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.modes {
+  display: flex;
+  gap: 2px;
+}
+
+.modeBtn {
+  padding: 4px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #666;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.modeBtn:hover:not(:disabled) {
+  color: #333;
+  background: #eee;
+}
+
+.modeBtn.active {
+  color: #0070f3;
+  background: #fff;
+  border-color: #d9d9d9;
+}
+
+.modeBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.uploadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.uploadBtn:hover:not(:disabled) {
+  color: #333;
+  border-color: #999;
+}
+
+.uploadBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fileInput {
+  display: none;
+}
+
+/* ---------- 面板容器 ---------- */
+
+.panes {
+  display: grid;
+  min-height: 420px;
+}
+
+/* 分栏：左右各半 */
+.panes.split {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* 单栏 */
+.panes.full {
+  grid-template-columns: 1fr;
+}
+
+.pane {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 分栏时中间分割线 */
+.panes.split .pane:first-child {
+  border-right: 1px solid #e5e5e5;
+}
+
+/* ---------- 编辑区 ---------- */
+
+.textarea {
+  flex: 1;
+  width: 100%;
+  min-height: 420px;
+  padding: 16px;
+  font-size: 15px;
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+  line-height: 1.7;
+  color: #111;
+  background: #fff;
+  border: none;
+  outline: none;
+  resize: none;
+}
+
+.textarea::placeholder {
+  color: #bbb;
+}
+
+.textarea:disabled {
+  background: #fafafa;
+  color: #999;
+}
+
+/* ---------- 预览区 ---------- */
+
+.preview {
+  flex: 1;
+  padding: 16px 20px;
+  overflow-y: auto;
+  line-height: 1.7;
+  color: #333;
+  font-size: 16px;
+  background: #fff;
+}
+
+.previewEmpty {
+  color: #bbb;
+  font-size: 15px;
+  text-align: center;
+  padding-top: 60px;
+}
+
+/* ---- Markdown 内容样式 ---- */
+
+.preview h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 8px;
+  margin: 0 0 16px;
+}
+
+.preview h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #111;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 6px;
+  margin: 24px 0 12px;
+}
+
+.preview h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+  margin: 20px 0 10px;
+}
+
+.preview h4,
+.preview h5,
+.preview h6 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 16px 0 8px;
+}
+
+.preview p {
+  margin: 0 0 14px;
+}
+
+.preview a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.preview a:hover {
+  text-decoration: underline;
+}
+
+.preview blockquote {
+  margin: 0 0 14px;
+  padding: 8px 16px;
+  border-left: 3px solid #0070f3;
+  background: #f6f9fc;
+  color: #555;
+}
+
+.preview blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* 代码：行内 */
+.preview code {
+  padding: 2px 6px;
+  font-size: 0.9em;
+  font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+  background: #f0f0f0;
+  border-radius: 3px;
+  color: #d63384;
+}
+
+/* 代码：块 */
+.preview pre {
+  margin: 0 0 14px;
+  padding: 14px 18px;
+  background: #f6f8fa;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.preview pre code {
+  padding: 0;
+  background: none;
+  color: #333;
+  font-size: inherit;
+}
+
+.preview ul,
+.preview ol {
+  margin: 0 0 14px;
+  padding-left: 24px;
+}
+
+.preview li {
+  margin-bottom: 4px;
+}
+
+.preview li > ul,
+.preview li > ol {
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+/* 任务列表 */
+.preview input[type="checkbox"] {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.preview hr {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #e5e5e5;
+}
+
+.preview table {
+  width: 100%;
+  margin: 0 0 14px;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.preview th {
+  padding: 8px 12px;
+  font-weight: 600;
+  text-align: left;
+  background: #f6f8fa;
+  border: 1px solid #d9d9d9;
+}
+
+.preview td {
+  padding: 8px 12px;
+  border: 1px solid #d9d9d9;
+}
+
+.preview tr:nth-child(even) td {
+  background: #fafafa;
+}
+
+.preview img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+.preview strong {
+  font-weight: 600;
+}
+
+.preview em {
+  font-style: italic;
+}
+
+.preview del {
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* ---------- 底部状态栏 ---------- */
+
+.statusBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: #999;
+  background: #fafafa;
+  border-top: 1px solid #e5e5e5;
+  user-select: none;
+}
+
+.charCount {
+  font-variant-numeric: tabular-nums;
+}
+
+.saveHint {
+  color: #bbb;
+}
+
+/* ============================================
+   响应式
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* 分栏变上下堆叠 */
+  .panes.split {
+    grid-template-columns: 1fr;
+  }
+
+  .panes.split .pane:first-child {
+    border-right: none;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .textarea,
+  .preview {
+    min-height: 280px;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .modeBtn {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+
+  .uploadBtn {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}

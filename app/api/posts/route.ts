@@ -4,11 +4,50 @@ import { authOptions } from "../../auth";
 import { prisma } from "../../lib/prisma";
 
 function slugify(text: string) {
-  return text
+  const slug = text
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/[^a-z0-9一-鿿]+/g, "-") // 保留中文字符
     .replace(/(^-|-$)/g, "");
+
+  // 纯中文标题无英文数字时，用 "post" 兜底
+  return slug || "post";
+}
+
+// 获取当前用户的所有文章（含草稿，供编辑器侧边栏使用）
+export async function GET() {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { success: false, message: "请先登录" },
+        { status: 401 }
+      );
+    }
+
+    const userId = (session.user as any).id as string;
+
+    const posts = await prisma.post.findMany({
+      where: { authorId: userId },
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        published: true,
+        updatedAt: true,
+      },
+      orderBy: { updatedAt: "desc" },
+    });
+
+    return NextResponse.json({ success: true, posts });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { success: false, message: "服务器错误" },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: Request) {
@@ -26,7 +65,7 @@ export async function POST(request: Request) {
     const userId = (session.user as any).id as string;
 
     const body = await request.json();
-    const { title, summary, content } = body;
+    const { title, summary, content, published } = body;
 
     // 校验
     if (!title?.trim()) {
@@ -58,7 +97,7 @@ export async function POST(request: Request) {
         content: content.trim(),
         slug,
         authorId: userId,
-        published: true,
+        published: published === true,
       },
     });
 

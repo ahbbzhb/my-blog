@@ -32,7 +32,11 @@ export default function Navbar() {
               href={`/u/${session.user?.name}`}
               className="navbar-user-avatar"
             >
-              {initial}
+              {session.user?.image ? (
+                <img src={session.user.image} alt={session.user?.name || ""} />
+              ) : (
+                initial
+              )}
             </Link>
             <Link
               href={`/u/${session.user?.name}`}

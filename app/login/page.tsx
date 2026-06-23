@@ -80,7 +80,12 @@ export default function LoginPage() {
         </button>
       </form>
 
-      <button className={styles.githubBtn}>使用 GitHub 登录</button>
+      <button
+        className={styles.githubBtn}
+        onClick={() => signIn("github", { callbackUrl: "/" })}
+      >
+        使用 GitHub 登录
+      </button>
 
       <p className={styles.footer}>
         没有账号？

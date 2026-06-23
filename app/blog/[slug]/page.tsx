@@ -13,7 +13,7 @@ export default async function BlogPage({
 }) {
   const { slug } = await params;
   const [post, session] = await Promise.all([
-    getPostBySlug(slug),
+    getPostBySlug(decodeURIComponent(slug)),
     getServerSession(authOptions),
   ]);
 

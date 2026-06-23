@@ -2,9 +2,15 @@
    用户主页
    ============================================ */
 
+.layout {
+  display: flex;
+  min-height: calc(100vh - 64px);
+}
+
 .page {
+  flex: 1;
+  min-width: 0;
   max-width: 740px;
-  margin: 0 auto;
   padding: 48px 24px;
 }
 
@@ -42,6 +48,13 @@
   font-weight: 700;
   color: #fff;
   user-select: none;
+  overflow: hidden;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .profileInfo {

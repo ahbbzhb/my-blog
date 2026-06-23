@@ -81,6 +81,7 @@ export async function POST(
           username,
           email,
           password: hashedPassword,
+          provider: "credentials",
         },
       });
 

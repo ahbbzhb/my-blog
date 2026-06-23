@@ -1,3 +1,7 @@
+"use client";
+
+import { useRef, useEffect } from "react";
+import MarkdownEditor from "./MarkdownEditor";
 import styles from "./EditorForm.module.css";
 
 type EditorFormProps = {
@@ -7,15 +11,16 @@ type EditorFormProps = {
 
   loading: boolean;
   error: string;
-
-  submitText: string;
+  success?: string;
 
   onTitleChange: (value: string) => void;
   onSummaryChange: (value: string) => void;
   onContentChange: (value: string) => void;
 
-  onSubmit: (e: React.FormEvent) => void;
-  onDelete?: () => void;
+  /** 保存草稿 */
+  onSave: () => void;
+  /** 发布文章 */
+  onPublish: () => void;
 };
 
 export default function EditorForm({
@@ -24,16 +29,31 @@ export default function EditorForm({
   content,
   loading,
   error,
-  submitText,
+  success,
   onTitleChange,
   onSummaryChange,
   onContentChange,
-  onSubmit,
-  onDelete,
+  onSave,
+  onPublish,
 }: EditorFormProps) {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Ctrl+S / Cmd+S → 保存草稿
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault();
+        if (!loading) onSave();
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [loading, onSave]);
+
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
+    <form ref={formRef} className={styles.form} onSubmit={(e) => e.preventDefault()}>
       {error && <p className={styles.error}>{error}</p>}
+      {success && <p className={styles.success}>{success}</p>}
 
       <div className={styles.field}>
         <label>标题</label>
@@ -58,29 +78,32 @@ export default function EditorForm({
 
       <div className={styles.field}>
         <label>正文</label>
-        <textarea
-          className={styles.editor}
-          value={content}
-          onChange={(e) => onContentChange(e.target.value)}
+        <MarkdownEditor
+          content={content}
+          onChange={onContentChange}
           disabled={loading}
+          onSave={onSave}
         />
       </div>
 
       <div className={styles.actions}>
-        <button className={styles.submitBtn} type="submit" disabled={loading}>
-          {loading ? "处理中..." : submitText}
+        <button
+          className={styles.saveBtn}
+          type="button"
+          onClick={onSave}
+          disabled={loading}
+        >
+          {loading ? "处理中..." : "保存草稿"}
         </button>
 
-        {onDelete && (
-          <button
-            className={styles.deleteBtn}
-            type="button"
-            onClick={onDelete}
-            disabled={loading}
-          >
-            删除文章
-          </button>
-        )}
+        <button
+          className={styles.publishBtn}
+          type="button"
+          onClick={onPublish}
+          disabled={loading}
+        >
+          {loading ? "处理中..." : "发布文章"}
+        </button>
       </div>
     </form>
   );

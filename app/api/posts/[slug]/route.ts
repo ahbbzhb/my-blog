@@ -6,24 +6,14 @@ from "../../../lib/prisma";
 
 export async function GET(
   request: Request,
-  {
-    params,
-  }: {
-    params: {
-      slug: string;
-    };
-  }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
+    const { slug } = await params;
+
     const post =
       await prisma.post.findFirst({
-        where: {
-          slug:
-            params.slug,
-
-          published:
-            true,
-        },
+        where: { slug },
       });
 
     if (!post) {
@@ -67,13 +57,7 @@ from "../../../auth";
 
 export async function PUT(
   request: Request,
-  {
-    params,
-  }: {
-    params: {
-      slug: string;
-    };
-  }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     // 当前登录用户
@@ -82,51 +66,21 @@ export async function PUT(
         authOptions
       );
 
-    if (
-      !session?.user?.email
-    ) {
+    const userId = (session.user as any).id as string;
+
+    if (!userId) {
       return NextResponse.json(
-        {
-          success: false,
-          message:
-            "请先登录",
-        },
-        {
-          status: 401,
-        }
+        { success: false, message: "请先登录" },
+        { status: 401 }
       );
     }
 
-    // 当前用户
-    const user =
-      await prisma.user.findUnique({
-        where: {
-          email:
-            session.user
-              .email!,
-        },
-      });
-
-    if (!user) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            "用户不存在",
-        },
-        {
-          status: 404,
-        }
-      );
-    }
+    const { slug } = await params;
 
     // 查文章
     const post =
       await prisma.post.findFirst({
-        where: {
-          slug:
-            params.slug,
-        },
+        where: { slug },
       });
 
     if (!post) {
@@ -145,7 +99,7 @@ export async function PUT(
     // 权限检查
     if (
       post.authorId !==
-      user.id
+      userId
     ) {
       return NextResponse.json(
         {
@@ -166,44 +120,30 @@ export async function PUT(
       title,
       summary,
       content,
+      published,
     } = body;
 
-    if (
-      !title?.trim()
-    ) {
-      return NextResponse.json({
-        success: false,
-        message:
-          "标题不能为空",
-      });
+    // 仅在校验传入的字段
+    if (title !== undefined && !title?.trim()) {
+      return NextResponse.json({ success: false, message: "标题不能为空" });
     }
 
-    if (
-      !content?.trim()
-    ) {
-      return NextResponse.json({
-        success: false,
-        message:
-          "正文不能为空",
-      });
+    if (content !== undefined && !content?.trim()) {
+      return NextResponse.json({ success: false, message: "正文不能为空" });
     }
+
+    // 只更新传入的字段
+    const data: Record<string, unknown> = {};
+
+    if (title !== undefined) data.title = title.trim();
+    if (summary !== undefined) data.summary = summary?.trim();
+    if (content !== undefined) data.content = content.trim();
+    if (published !== undefined) data.published = published === true;
 
     const updatedPost =
       await prisma.post.update({
-        where: {
-          id: post.id,
-        },
-
-        data: {
-          title:
-            title.trim(),
-
-          summary:
-            summary?.trim(),
-
-          content:
-            content.trim(),
-        },
+        where: { id: post.id },
+        data,
       });
 
     return NextResponse.json({
@@ -228,31 +168,24 @@ export async function PUT(
 }
 export async function DELETE(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user?.email) {
+    const userId = (session.user as any).id as string;
+
+    const { slug } = await params;
+
+    if (!userId) {
       return NextResponse.json(
         { success: false, message: "请先登录" },
         { status: 401 }
       );
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email! },
-    });
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: "用户不存在" },
-        { status: 404 }
-      );
-    }
-
     const post = await prisma.post.findFirst({
-      where: { slug: params.slug },
+      where: { slug },
     });
 
     if (!post) {
@@ -262,7 +195,7 @@ export async function DELETE(
       );
     }
 
-    if (post.authorId !== user.id) {
+    if (post.authorId !== userId) {
       return NextResponse.json(
         { success: false, message: "无权限删除此文章" },
         { status: 403 }

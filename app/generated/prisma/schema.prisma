@@ -13,12 +13,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  username  String   @unique
-  password  String // 后续用 bcrypt 哈希
-  avatar    String?
-  bio       String?
+  id       String  @id @default(cuid())
+  email    String  @unique
+  username String  @unique
+  password String? // bcrypt 哈希
+
+  avatar String?
+  bio    String?
+
+  provider String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
