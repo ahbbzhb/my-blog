@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import MarkdownEditor from "./MarkdownEditor";
+import { generateSummary, generateTitle } from "../lib/api/ai";
 import styles from "./EditorForm.module.css";
 
 type EditorFormProps = {
@@ -37,6 +38,40 @@ export default function EditorForm({
   onPublish,
 }: EditorFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const [aiLoading, setAiLoading] = useState<"title" | "summary" | null>(null);
+  const [aiError, setAiError] = useState("");
+
+  // AI 生成标题
+  async function handleAITitle() {
+    if (!content.trim()) return;
+    setAiLoading("title");
+    setAiError("");
+    try {
+      const result = await generateTitle(content);
+      onTitleChange(result);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "AI 标题生成失败";
+      setAiError(msg);
+    } finally {
+      setAiLoading(null);
+    }
+  }
+
+  // AI 生成摘要
+  async function handleAISummarize() {
+    if (!content.trim()) return;
+    setAiLoading("summary");
+    setAiError("");
+    try {
+      const result = await generateSummary(content);
+      onSummaryChange(result);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "AI 摘要生成失败";
+      setAiError(msg);
+    } finally {
+      setAiLoading(null);
+    }
+  }
 
   // Ctrl+S / Cmd+S → 保存草稿
   useEffect(() => {
@@ -56,7 +91,19 @@ export default function EditorForm({
       {success && <p className={styles.success}>{success}</p>}
 
       <div className={styles.field}>
-        <label>标题</label>
+        <div className={styles.fieldLabel}>
+          <label>标题</label>
+          <button
+            className={styles.aiBtn}
+            type="button"
+            onClick={handleAITitle}
+            disabled={loading || aiLoading !== null || !content.trim()}
+            title="使用 AI 根据正文生成标题"
+          >
+            {aiLoading === "title" ? "生成中..." : "AI 生成"}
+          </button>
+        </div>
+        {aiError && <p className={styles.aiError}>{aiError}</p>}
         <input
           className={styles.input}
           type="text"
@@ -67,7 +114,18 @@ export default function EditorForm({
       </div>
 
       <div className={styles.field}>
-        <label>摘要</label>
+        <div className={styles.fieldLabel}>
+          <label>摘要</label>
+          <button
+            className={styles.aiBtn}
+            type="button"
+            onClick={handleAISummarize}
+            disabled={loading || aiLoading !== null || !content.trim()}
+            title="使用 AI 根据正文生成摘要"
+          >
+            {aiLoading === "summary" ? "生成中..." : "AI 生成"}
+          </button>
+        </div>
         <textarea
           className={styles.textarea}
           value={summary}

@@ -6,7 +6,7 @@ import { generateSEO } from "../../lib/ai/seo";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { action, content, meta } = body;
+    const { action, content } = body;
 
     if (!action || !content) {
       return NextResponse.json(
@@ -37,18 +37,13 @@ export async function POST(req: Request) {
         );
     }
 
-    return NextResponse.json({
-      success: true,
-      data,
-    });
+    return NextResponse.json({ success: true, data });
   } catch (err) {
-    console.error("AI API Error:", err);
+    const msg = err instanceof Error ? err.message : "Internal Server Error";
+    console.error("[Route] AI API Error:", msg, err);
 
     return NextResponse.json(
-      {
-        success: false,
-        error: "Internal Server Error",
-      },
+      { success: false, error: msg },
       { status: 500 }
     );
   }

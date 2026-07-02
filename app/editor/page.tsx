@@ -60,7 +60,7 @@ export default function EditorPage() {
         return;
       }
 
-      clear(); // ✅ 已保存到服务器，清除本地草稿
+      clear(); //已保存到服务器，清除本地草稿
       router.push(`/editor/${data.slug}`);
     } catch {
       setError("网络错误");
@@ -100,7 +100,7 @@ export default function EditorPage() {
         return;
       }
 
-      clear(); // ✅ 已发布，清除本地草稿
+      clear(); //已发布，清除本地草稿
       router.push(`/blog/${data.slug}`);
     } catch {
       setError("网络错误");
@@ -113,7 +113,7 @@ export default function EditorPage() {
     <main className={styles.page}>
       <h1 className={styles.title}>写博客</h1>
 
-      {/* ✅ 草稿恢复提示 */}
+      {/*草稿恢复提示 */}
       {isRestored && (
         <p className={styles.draftHint}>📝 已恢复未保存的内容</p>
       )}

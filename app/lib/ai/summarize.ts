@@ -10,15 +10,18 @@ export async function summarize(content: string): Promise<string> {
 
   try {
     const res = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "glm-4.7-flash",
       temperature: 0.3,
       max_tokens: 300,
       messages: [
         { role: "system", content: prompts.summarize },
         { role: "user", content: input },
       ],
+      // @ts-expect-error thinking 是智谱 API 扩展参数
+      thinking: { type: "disabled" },
     });
-    return res.choices[0]?.message?.content ?? "";
+    const msg = res.choices[0]?.message;
+    return msg?.content || (msg as any)?.reasoning_content || "";
   } catch (error) {
     console.error("AI Summarize failed:", error);
     throw new Error(

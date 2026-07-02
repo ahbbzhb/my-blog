@@ -10,15 +10,18 @@ export async function generateSEO(content: string): Promise<string> {
 
   try {
     const res = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "glm-4.7-flash",
       temperature: 0.3,
       max_tokens: 200,
       messages: [
         { role: "system", content: prompts.seo },
         { role: "user", content: input },
       ],
+      // @ts-expect-error thinking 是智谱 API 扩展参数
+      thinking: { type: "disabled" },
     });
-    return res.choices[0]?.message?.content ?? "";
+    const msg = res.choices[0]?.message;
+    return (msg as any)?.reasoning_content || msg?.content || "";
   } catch (error) {
     console.error("AI SEO generation failed:", error);
     throw new Error(
