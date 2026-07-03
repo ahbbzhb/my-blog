@@ -67,14 +67,14 @@ export async function PUT(
         authOptions
       );
 
-    const userId = (session.user as any).id as string;
-
-    if (!userId) {
+    if (!session?.user?.email) {
       return NextResponse.json(
         { success: false, message: "请先登录" },
         { status: 401 }
       );
     }
+
+    const userId = (session.user as any).id as string;
 
     const { slug } = await params;
 
@@ -184,16 +184,16 @@ export async function DELETE(
   try {
     const session = await getServerSession(authOptions);
 
-    const userId = (session.user as any).id as string;
-
-    const { slug } = await params;
-
-    if (!userId) {
+    if (!session?.user?.email) {
       return NextResponse.json(
         { success: false, message: "请先登录" },
         { status: 401 }
       );
     }
+
+    const userId = (session.user as any).id as string;
+
+    const { slug } = await params;
 
     const post = await prisma.post.findFirst({
       where: { slug },
