@@ -4,7 +4,10 @@ import { authOptions } from "../../auth";
 import { getUserByUsername, getPostsByUsername } from "../../lib/data";
 import PostCard from "../../components/PostCard";
 import PostSidebar from "../../components/PostSidebar";
+import SokobanGame from "../../components/game/SokobanGame";
 import styles from "./page.module.css";
+
+export const dynamic = "force-dynamic";
 
 export default async function UserPage({
   params,
@@ -97,6 +100,11 @@ export default async function UserPage({
           )}
         </section>
       </main>
+
+      {/* ===== 右侧：推箱子游戏 ===== */}
+      <aside className={styles.gameSidebar}>
+        <SokobanGame />
+      </aside>
     </div>
   );
 }

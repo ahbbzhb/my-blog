@@ -136,9 +136,48 @@
   text-decoration: underline;
 }
 
+/* ---------- 游戏侧边栏 ---------- */
+
+.gameSidebar {
+  flex: 1;
+  min-width: 420px;
+  max-width: 560px;
+  border-left: 1px solid #e5e5e5;
+  background: #fafafa;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
 /* ============================================
    响应式
    ============================================ */
+
+@media (max-width: 1200px) {
+  .gameSidebar {
+    min-width: 340px;
+    max-width: 440px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .layout {
+    flex-wrap: wrap;
+  }
+
+  .gameSidebar {
+    flex: auto;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    position: static;
+    height: auto;
+    min-height: 500px;
+    border-left: none;
+    border-top: 1px solid #e5e5e5;
+  }
+}
 
 @media (max-width: 640px) {
   .page {

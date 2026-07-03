@@ -4,6 +4,8 @@ import PostCard from "@/app/components/PostCard";
 import SearchBar from "@/app/components/SearchBar";
 import SokobanGame from "@/app/components/game/SokobanGame";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage({
   searchParams,
 }: {
