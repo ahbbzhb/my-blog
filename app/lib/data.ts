@@ -11,7 +11,7 @@ export async function getPosts(): Promise<PostData[]> {
     where: { published: true },
     include: {
       author: {
-        select: { username: true, avatar: true },
+        select: { id: true, username: true, avatar: true },
       },
       tags: { select: { id: true, name: true } },
     },
@@ -97,7 +97,7 @@ export async function getPostsByUsername(
     },
     include: {
       author: {
-        select: { username: true, avatar: true },
+        select: { id: true, username: true, avatar: true },
       },
       tags: { select: { id: true, name: true } },
     },
