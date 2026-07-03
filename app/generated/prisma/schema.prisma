@@ -47,6 +47,8 @@ model Post {
   comments Comment[]
   likes    Like[]
 
+  tags Tag[]
+
   @@unique([authorId, slug])
 }
 
@@ -74,4 +76,12 @@ model Like {
   post      Post     @relation(fields: [postId], references: [id])
 
   @@unique([userId, postId])
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  posts Post[]
 }

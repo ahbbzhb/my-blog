@@ -36,6 +36,7 @@ export async function GET() {
         slug: true,
         published: true,
         updatedAt: true,
+        tags: { select: { id: true, name: true } },
       },
       orderBy: { updatedAt: "desc" },
     });
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
     const userId = (session.user as any).id as string;
 
     const body = await request.json();
-    const { title, summary, content, published } = body;
+    const { title, summary, content, published, tags } = body;
 
     // 校验
     if (!title?.trim()) {
@@ -98,6 +99,16 @@ export async function POST(request: Request) {
         slug,
         authorId: userId,
         published: published === true,
+        ...(tags?.length
+          ? {
+              tags: {
+                connectOrCreate: tags.map((name: string) => ({
+                  where: { name: name.trim() },
+                  create: { name: name.trim() },
+                })),
+              },
+            }
+          : {}),
       },
     });
 

@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import MarkdownEditor from "./MarkdownEditor";
+import TagInput from "./TagInput";
 import { generateSummary, generateTitle } from "../lib/api/ai";
 import styles from "./EditorForm.module.css";
 
@@ -9,6 +10,7 @@ type EditorFormProps = {
   title: string;
   summary: string;
   content: string;
+  tags: string[];
 
   loading: boolean;
   error: string;
@@ -17,6 +19,10 @@ type EditorFormProps = {
   onTitleChange: (value: string) => void;
   onSummaryChange: (value: string) => void;
   onContentChange: (value: string) => void;
+  onTagsChange: (tags: string[]) => void;
+
+  /** 已有标签建议（autocomplete） */
+  tagSuggestions?: string[];
 
   /** 保存草稿 */
   onSave: () => void;
@@ -28,12 +34,15 @@ export default function EditorForm({
   title,
   summary,
   content,
+  tags,
   loading,
   error,
   success,
   onTitleChange,
   onSummaryChange,
   onContentChange,
+  onTagsChange,
+  tagSuggestions,
   onSave,
   onPublish,
 }: EditorFormProps) {
@@ -131,6 +140,17 @@ export default function EditorForm({
           value={summary}
           onChange={(e) => onSummaryChange(e.target.value)}
           disabled={loading}
+        />
+      </div>
+
+      <div className={styles.field}>
+        <label>标签</label>
+        <TagInput
+          tags={tags}
+          onChange={onTagsChange}
+          suggestions={tagSuggestions}
+          disabled={loading}
+          placeholder="输入标签，回车添加"
         />
       </div>
 

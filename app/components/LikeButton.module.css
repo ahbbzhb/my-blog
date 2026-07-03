@@ -10,17 +10,16 @@
   font-size: 15px;
   font-family: inherit;
   color: #666;
-  background: #f7f7f7;
-  border: 1px solid #e5e5e5;
-  border-radius: 20px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  transition: background 0.15s, transform 0.1s;
   user-select: none;
 }
 
 .btn:hover:not(:disabled) {
   background: #fff0f0;
-  border-color: #ffb8b8;
 }
 
 .btn:active:not(:disabled) {
@@ -35,7 +34,6 @@
 .liked {
   color: #e00;
   background: #fff0f0;
-  border-color: #ffb8b8;
 }
 
 .icon {

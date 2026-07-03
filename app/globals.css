@@ -294,3 +294,51 @@ body {
     margin-left: 0;
   }
 }
+
+/* ============================================
+   首页两栏布局（文章 + 游戏）
+   ============================================ */
+
+.homepage-layout {
+  display: flex;
+  min-height: calc(100vh - 64px);
+}
+
+.homepage-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.homepage-game {
+  width: 480px;
+  flex-shrink: 0;
+  border-left: 1px solid #e5e5e5;
+  background: #fafafa;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+/* 中等屏幕：游戏区收窄 */
+@media (max-width: 1200px) {
+  .homepage-game {
+    width: 400px;
+  }
+}
+
+/* 窄屏幕：上下堆叠 */
+@media (max-width: 1024px) {
+  .homepage-layout {
+    flex-direction: column;
+  }
+
+  .homepage-game {
+    width: 100%;
+    position: static;
+    height: auto;
+    min-height: 500px;
+    border-left: none;
+    border-top: 1px solid #e5e5e5;
+  }
+}

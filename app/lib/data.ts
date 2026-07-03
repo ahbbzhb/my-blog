@@ -13,6 +13,7 @@ export async function getPosts(): Promise<PostData[]> {
       author: {
         select: { username: true, avatar: true },
       },
+      tags: { select: { id: true, name: true } },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -29,6 +30,7 @@ export async function getPostBySlug(
       author: {
         select: { id: true, username: true, avatar: true },
       },
+      tags: { select: { id: true, name: true } },
     },
   });
   return post;
@@ -97,6 +99,7 @@ export async function getPostsByUsername(
       author: {
         select: { username: true, avatar: true },
       },
+      tags: { select: { id: true, name: true } },
     },
     orderBy: { createdAt: "desc" },
   });

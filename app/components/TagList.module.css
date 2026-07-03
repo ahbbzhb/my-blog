@@ -1,0 +1,33 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  font-size: 12px;
+  color: #92400e;
+  background: #fef3c7;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.tag:hover {
+  background: #fde68a;
+}
+
+/* md 尺寸 — 文章详情页使用 */
+.md {
+  margin-top: 12px;
+}
+
+.md .tag {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 13px;
+}

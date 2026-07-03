@@ -16,6 +16,8 @@ export default function EditPostPage() {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagSuggestions, setTagSuggestions] = useState<string[]>([]);
   const [fetching, setFetching] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -33,6 +35,7 @@ export default function EditPostPage() {
       setTitle(restoredData.title);
       setSummary(restoredData.summary);
       setContent(restoredData.content);
+      setTags(restoredData.tags);
       setFetching(false);
       draftApplied.current = true;
     }
@@ -59,6 +62,7 @@ export default function EditPostPage() {
         setTitle(data.post.title);
         setSummary(data.post.summary || "");
         setContent(data.post.content);
+        setTags(data.post.tags?.map((t: { name: string }) => t.name) ?? []);
         serverLoaded.current = true;
       } catch {
         setError("加载失败");
@@ -70,10 +74,26 @@ export default function EditPostPage() {
     loadPost();
   }, [slug, restoredData]); // restoredData 变化后（为 null 即无草稿）再加载
 
+  // 加载已有标签建议
+  useEffect(() => {
+    fetch("/api/posts")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.posts) {
+          const allTags = new Set<string>();
+          (data.posts as Array<{ tags?: { name: string }[] }>).forEach(
+            (p) => p.tags?.forEach((t) => allTags.add(t.name))
+          );
+          setTagSuggestions(Array.from(allTags));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   // 内容变化 → 自动存 localStorage（防抖）
   useEffect(() => {
-    persist({ title, summary, content });
-  }, [title, summary, content, persist]);
+    persist({ title, summary, content, tags });
+  }, [title, summary, content, tags, persist]);
 
   /** 保存草稿 → PUT published=false → 留在当前页 */
   async function handleSave() {
@@ -85,7 +105,7 @@ export default function EditPostPage() {
       const response = await fetch(`/api/posts/${slug}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, summary, content, published: false }),
+        body: JSON.stringify({ title, summary, content, tags, published: false }),
       });
 
       const data = await response.json();
@@ -126,7 +146,7 @@ export default function EditPostPage() {
       const response = await fetch(`/api/posts/${slug}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, summary, content, published: true }),
+        body: JSON.stringify({ title, summary, content, tags, published: true }),
       });
 
       const data = await response.json();
@@ -167,12 +187,15 @@ export default function EditPostPage() {
         title={title}
         summary={summary}
         content={content}
+        tags={tags}
         loading={saving}
         error={error}
         success={success}
         onTitleChange={setTitle}
         onSummaryChange={setSummary}
         onContentChange={setContent}
+        onTagsChange={setTags}
+        tagSuggestions={tagSuggestions}
         onSave={handleSave}
         onPublish={handlePublish}
       />

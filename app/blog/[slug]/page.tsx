@@ -4,6 +4,7 @@ import { authOptions } from "../../auth";
 import { getPostBySlug, getCommentsByPostId, getPostLikeInfo } from "../../lib/data";
 import CommentSection from "../../components/CommentSection";
 import LikeButton from "../../components/LikeButton";
+import TagList from "../../components/TagList";
 import styles from "./page.module.css";
 
 export default async function BlogPage({
@@ -51,7 +52,14 @@ export default async function BlogPage({
 
         {/* 文章头部：标题 + 元信息 */}
         <header className={styles.header}>
-          <h1 className={styles.title}>{post.title}</h1>
+          <div className={styles.titleRow}>
+            <h1 className={styles.title}>{post.title}</h1>
+            <LikeButton
+              postId={post.id}
+              initialLiked={likeInfo.userLiked}
+              initialCount={likeInfo.count}
+            />
+          </div>
 
           <div className={styles.meta}>
             <Link
@@ -71,6 +79,8 @@ export default async function BlogPage({
               </Link>
             )}
           </div>
+
+          <TagList tags={post.tags} size="md" />
         </header>
 
         <hr className={styles.divider} />
@@ -79,16 +89,9 @@ export default async function BlogPage({
         <div className={styles.content}>{post.content}</div>
       </article>
 
-      {/* 文章点赞 */}
-      <div className={styles.interactions}>
-        <LikeButton
-          postId={post.id}
-          initialLiked={likeInfo.userLiked}
-          initialCount={likeInfo.count}
-        />
+      <div className={styles.bottomCard}>
+        <CommentSection postId={post.id} initialComments={comments} />
       </div>
-
-      <CommentSection postId={post.id} initialComments={comments} />
     </main>
   );
 }

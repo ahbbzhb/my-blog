@@ -16,6 +16,8 @@ export default function EditorPage() {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagSuggestions, setTagSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -31,14 +33,31 @@ export default function EditorPage() {
       setTitle(restoredData.title);
       setSummary(restoredData.summary);
       setContent(restoredData.content);
+      setTags(restoredData.tags);
       draftApplied.current = true;
     }
   }, [restoredData]);
 
+  // 加载已有标签建议
+  useEffect(() => {
+    fetch("/api/posts")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.posts) {
+          const allTags = new Set<string>();
+          (data.posts as Array<{ tags?: { name: string }[] }>).forEach(
+            (p) => p.tags?.forEach((t) => allTags.add(t.name))
+          );
+          setTagSuggestions(Array.from(allTags));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   // 内容变化 → 自动存 localStorage（防抖）
   useEffect(() => {
-    persist({ title, summary, content });
-  }, [title, summary, content, persist]);
+    persist({ title, summary, content, tags });
+  }, [title, summary, content, tags, persist]);
 
   /** 保存草稿 → POST published=false → 跳转编辑页继续写 */
   async function handleSave() {
@@ -50,7 +69,7 @@ export default function EditorPage() {
       const response = await fetch("/api/posts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, summary, content, published: false }),
+        body: JSON.stringify({ title, summary, content, tags, published: false }),
       });
 
       const data = await response.json();
@@ -90,7 +109,7 @@ export default function EditorPage() {
       const response = await fetch("/api/posts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, summary, content, published: true }),
+        body: JSON.stringify({ title, summary, content, tags, published: true }),
       });
 
       const data = await response.json();
@@ -122,12 +141,15 @@ export default function EditorPage() {
         title={title}
         summary={summary}
         content={content}
+        tags={tags}
         loading={loading}
         error={error}
         success={success}
         onTitleChange={setTitle}
         onSummaryChange={setSummary}
         onContentChange={setContent}
+        onTagsChange={setTags}
+        tagSuggestions={tagSuggestions}
         onSave={handleSave}
         onPublish={handlePublish}
       />

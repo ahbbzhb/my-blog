@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { PostData } from "../lib/types";
+import TagList from "./TagList";
 
 export default function PostCard({ post }: { post: PostData }) {
   return (
@@ -9,6 +10,7 @@ export default function PostCard({ post }: { post: PostData }) {
           <Link href={`/blog/${post.slug}`}>{post.title}</Link>
         </h2>
         <p className="post-card-summary">{post.summary}</p>
+        <TagList tags={post.tags} size="sm" />
       </div>
 
       <div className="post-card-meta">

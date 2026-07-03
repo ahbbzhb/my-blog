@@ -16,6 +16,7 @@ export interface PostData {
     username: string;
     avatar: string | null;
   };
+  tags: { id: number; name: string }[];
 }
 
 export interface UserData {

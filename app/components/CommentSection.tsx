@@ -127,7 +127,7 @@ export default function CommentSection({
                 <span className={styles.commentAuthor}>
                   {comment.author.username}
                 </span>
-                <span className={styles.commentTime}>
+                <span className={styles.commentTime} suppressHydrationWarning>
                   {formatTime(comment.createdAt)}
                 </span>
               </div>

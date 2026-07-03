@@ -13,7 +13,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <Link href="/">My Blog</Link>
+        <Link href="/">BlogHub</Link>
       </div>
 
       <div className="navbar-links">

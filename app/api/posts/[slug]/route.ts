@@ -14,6 +14,7 @@ export async function GET(
     const post =
       await prisma.post.findFirst({
         where: { slug },
+        include: { tags: { select: { id: true, name: true } } },
       });
 
     if (!post) {
@@ -121,6 +122,7 @@ export async function PUT(
       summary,
       content,
       published,
+      tags,
     } = body;
 
     // 仅在校验传入的字段
@@ -139,6 +141,15 @@ export async function PUT(
     if (summary !== undefined) data.summary = summary?.trim();
     if (content !== undefined) data.content = content.trim();
     if (published !== undefined) data.published = published === true;
+    if (tags !== undefined) {
+      data.tags = {
+        set: [],
+        connectOrCreate: (tags as string[]).map((name: string) => ({
+          where: { name: name.trim() },
+          create: { name: name.trim() },
+        })),
+      };
+    }
 
     const updatedPost =
       await prisma.post.update({

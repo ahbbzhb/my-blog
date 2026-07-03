@@ -3,9 +3,12 @@
    ============================================ */
 
 .article {
-  max-width: 740px;
-  margin: 0 auto;
-  padding: 48px 24px;
+  max-width: 800px;
+  margin: 48px auto 24px;
+  padding: 48px 40px;
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  border-radius: 12px;
 }
 
 .backLink {
@@ -24,12 +27,20 @@
   margin-bottom: 32px;
 }
 
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 .title {
   font-size: 36px;
   font-weight: 700;
   color: #111;
   line-height: 1.3;
-  margin-bottom: 16px;
+  margin-bottom: 0;
 }
 
 .meta {
@@ -72,14 +83,17 @@
   margin-bottom: 32px;
 }
 
-.interactions {
-  max-width: 740px;
-  margin: 0 auto;
-  padding: 0 24px 24px;
+.bottomCard {
+  max-width: 800px;
+  margin: 0 auto 48px;
+  padding: 32px 40px;
+  background: #fff;
+  border: 1px solid #d4d4d4;
+  border-radius: 12px;
 }
 
 .content {
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.8;
   color: #333;
 }
@@ -114,9 +128,32 @@
    响应式
    ============================================ */
 
+@media (max-width: 880px) {
+  .article {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    padding: 32px 24px;
+  }
+
+  .bottomCard {
+    max-width: 100%;
+    margin-bottom: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+}
+
 @media (max-width: 640px) {
   .article {
     padding: 32px 16px;
+  }
+
+  .bottomCard {
+    padding: 24px 16px;
   }
 
   .title {

@@ -1,29 +1,71 @@
+import { Suspense } from "react";
 import { getPosts } from "@/app/lib/data";
 import PostCard from "@/app/components/PostCard";
+import SearchBar from "@/app/components/SearchBar";
+import SokobanGame from "@/app/components/game/SokobanGame";
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; tag?: string }>;
+}) {
   const posts = await getPosts();
+  const { q, tag } = await searchParams;
+
+  // 按标签和标题过滤
+  let filtered = posts;
+  if (tag) {
+    filtered = filtered.filter((p) =>
+      p.tags.some((t) => t.name === tag)
+    );
+  }
+  if (q) {
+    const lower = q.toLowerCase();
+    filtered = filtered.filter(
+      (p) =>
+        p.title.toLowerCase().includes(lower) ||
+        p.summary?.toLowerCase().includes(lower)
+    );
+  }
+
+  const heading = tag
+    ? `标签「${tag}」${q ? ` — "${q}"` : ""}`
+    : q
+      ? `搜索「${q}」`
+      : "最新文章";
 
   return (
-    <>
-      {/* ===== Hero 区域 ===== */}
-      <section className="hero">
-        <div className="container">
-          <h1 className="hero-title">Welcome to BlogHub</h1>
-          <p className="hero-subtitle">
-            一个简洁的写作平台，分享你的想法，发现有趣的内容
-          </p>
-        </div>
-      </section>
+    <div className="homepage-layout">
+      {/* ===== 左侧：主内容 ===== */}
+      <div className="homepage-main">
+        <section className="hero">
+          <div className="container">
+            <h1 className="hero-title">Welcome to BlogHub</h1>
+            <Suspense fallback={null}>
+              <SearchBar />
+            </Suspense>
+          </div>
+        </section>
 
-      {/* ===== 文章列表 ===== */}
-      <section className="post-list">
-        <h2 className="post-list-heading">最新文章</h2>
+        <section className="post-list">
+          <h2 className="post-list-heading">{heading}</h2>
 
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </section>
-    </>
+          {filtered.length > 0 ? (
+            filtered.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))
+          ) : (
+            <p style={{ textAlign: "center", color: "#999", padding: "48px 0" }}>
+              没有找到相关文章
+            </p>
+          )}
+        </section>
+      </div>
+
+      {/* ===== 右侧：推箱子游戏 ===== */}
+      <aside className="homepage-game">
+        <SokobanGame />
+      </aside>
+    </div>
   );
 }

@@ -6,6 +6,7 @@ interface DraftData {
   title: string;
   summary: string;
   content: string;
+  tags: string[];
   updatedAt: number;
 }
 
@@ -34,6 +35,8 @@ function readDraft(key: string): DraftData | null {
       typeof data.summary === "string" &&
       typeof data.content === "string"
     ) {
+      // tags 向后兼容：旧草稿没有 tags 字段时默认空数组
+      if (!Array.isArray(data.tags)) data.tags = [];
       return data;
     }
     return null;
@@ -68,7 +71,7 @@ export function useDraftProtection(slug: string) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const persist = useCallback(
-    (data: { title: string; summary: string; content: string }) => {
+    (data: { title: string; summary: string; content: string; tags: string[] }) => {
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
         try {
