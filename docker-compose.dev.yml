@@ -1,0 +1,14 @@
+# 开发模式覆盖：挂载源码 + 热更新
+# 用法：docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+services:
+  nextjs:
+    build:
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules
+    environment:
+      NODE_ENV: development
+
+volumes:
+  node_modules:
