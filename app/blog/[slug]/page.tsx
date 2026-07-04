@@ -1,5 +1,10 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
 import { authOptions } from "../../auth";
 import { getPostBySlug, getCommentsByPostId, getPostLikeInfo } from "../../lib/data";
 import CommentSection from "../../components/CommentSection";
@@ -88,7 +93,11 @@ export default async function BlogPage({
         <hr className={styles.divider} />
 
         {/* 文章正文 */}
-        <div className={styles.content}>{post.content}</div>
+        <div className={styles.content}>
+          <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
+            {post.content}
+          </ReactMarkdown>
+        </div>
       </article>
 
       <div className={styles.bottomCard}>
