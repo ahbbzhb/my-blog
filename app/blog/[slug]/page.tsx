@@ -1,14 +1,10 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
-import "katex/dist/katex.min.css";
 import { authOptions } from "../../auth";
 import { getPostBySlug, getCommentsByPostId, getPostLikeInfo } from "../../lib/data";
 import CommentSection from "../../components/CommentSection";
 import LikeButton from "../../components/LikeButton";
+import MarkdownRenderer from "../../components/MarkdownRenderer";
 import TagList from "../../components/TagList";
 import styles from "./page.module.css";
 
@@ -94,9 +90,7 @@ export default async function BlogPage({
 
         {/* 文章正文 */}
         <div className={styles.content}>
-          <ReactMarkdown remarkPlugins={[remarkGfm, remarkMath]} rehypePlugins={[rehypeKatex]}>
-            {post.content}
-          </ReactMarkdown>
+          <MarkdownRenderer content={post.content} />
         </div>
       </article>
 
